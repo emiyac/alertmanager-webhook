@@ -1,0 +1,10 @@
+#### 告警名称: {{ items.groupLabels.get('alertname') }} 告警状态: <font color="#FF6A6A">{{ items.status }}({{ items.alerts | length }})</font>
+{% for item in items.alerts %}
+> ##### 名称: **<font color="#228B22">{{ item.labels.get("job") }}</font>**
+> ##### 日志等级: {{ item.labels.get("level") }}
+> ##### 告警级别: {{ item.labels.get("severity") }}
+> ##### 日志文件: {{ item.labels.get("filename") }}
+> ##### 描述信息: {{ item.annotations.get("description") }}
+> ##### 汇总信息: {{ item.annotations.get("summary") }}
+> [点击查看告警信息]({{ grafana_url }}{{ item.generatorURL }})
+{% endfor %}
