@@ -3,9 +3,10 @@ import hmac
 import hashlib
 import base64
 import urllib.parse
+from typing import Tuple
 
 
-def get_sign(secret: str) -> (str, str):
+def get_sign(secret: str) -> Tuple[str, str]:
     timestamp = str(round(time.time() * 1000))
     secret_enc = secret.encode('utf-8')
     string_to_sign = '{}\n{}'.format(timestamp, secret)

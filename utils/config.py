@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     # 企业微信机器人配置
     WX_WEBHOOK: str = Field(
         default="",
-        env="WEBHOOK_WX", description="企业微信机器人webhook")
+        env="WX_WEBHOOK", description="企业微信机器人webhook")
     WX_TEMPLATE: str = Field(default="wx.tmpl", env="WX_TEMPLATE", description="企业微信告警信息模板")
     # 钉钉机器人配置
     DINGTALK_WEBHOOK: str = Field(
@@ -34,17 +34,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-
-
-def get_logger() -> logging.Logger:
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.DEBUG if settings.DEBUG else logging.INFO)
-    formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s")
-    handler.setFormatter(formatter)
-    logger = logging.getLogger("root")
-    logger.addHandler(handler)
-    logger.setLevel(logging.DEBUG if settings.DEBUG else logging.INFO)
-    return logger
-
-
-logger = get_logger()
