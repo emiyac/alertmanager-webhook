@@ -1,10 +1,12 @@
 #### 告警名称: {{ items.groupLabels.get('alertname') }} 告警状态: {% if items.status == "firing" %}<font color="#FF8C00">{% else %}<font color="#3CB371">{% endif %}{{ items.status }}({{ items.alerts | length }})</font>
-{% for item in items.alerts %}
+{% for item in items.alerts -%}
 > ##### 名称: {{ item.labels.get("job") }}
 > ##### 日志等级: <font color="#FF8C00">{{ item.labels.get("level") }}</font>
 > ##### 告警级别: <font color="#FF8C00">{{ item.labels.get("severity") }}</font>
 > ##### 日志文件: {{ item.labels.get("filename") }}
 > ##### 描述信息: {{ item.annotations.get("description") }}
 > ##### 汇总信息: {{ item.annotations.get("summary") }}
+{% autoescape false -%}
 > [点击查看告警信息]({{ grafana_url }}{{ item.generatorURL }})
+{% endautoescape %}
 {% endfor %}

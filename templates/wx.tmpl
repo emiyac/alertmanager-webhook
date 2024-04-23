@@ -1,5 +1,5 @@
 ##### alertname: {{ items.groupLabels.get('alertname') }} status: {% if items.status == "firing" %}<font color="#FF8C00">{% else %}<font color="#3CB371">{% endif %}{{ items.status }}</font> count: {{ items.alerts | length }}
-{% for item in items.alerts %}
+{% for item in items.alerts -%}
 > status: {% if items.status == "firing" %}<font color="#FF8C00">{% else %}<font color="#3CB371">{% endif %}{{ item.status }}</font>
 {%- for key, value in item.labels.items() %}
 > {{ key }}: {{ value }}
@@ -7,5 +7,7 @@
     {% for key, value in item.annotations.items() %}
 > {{ key }}: {{ value }}
     {%- endfor %}
+{% autoescape false -%}
 > [generatorURL]({{ grafana_url }}{{ item.generatorURL }})
+{% endautoescape %}
 {% endfor %}
