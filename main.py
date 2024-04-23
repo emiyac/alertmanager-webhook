@@ -13,6 +13,7 @@ grafana_url = settings.GRAFANA_URL[-1] if settings.GRAFANA_URL.endswith('/') els
 
 @app.get("/")
 def health_check():
+    logger.info("s")
     return {"code": "0000", "data": "health"}
 
 
@@ -25,11 +26,11 @@ async def send_msg_to_wx(items: AlertManagerModel):
     logger.debug("content is: {}".format(content))
     data = {"msgtype": "markdown", "markdown": {"content": content}}
     
-    # async with aiohttp.ClientSession() as session:
-    #     async with session.post(url=settings.WX_WEBHOOK, json=data, timeout=timeout) as resp:
-    #         resp_code = resp.status
-    #         resp_data = await resp.json()
-    #         logger.info("code={}, result={}".format(resp_code, resp_data))
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=settings.WX_WEBHOOK, json=data, timeout=timeout) as resp:
+            resp_code = resp.status
+            resp_data = await resp.json()
+            logger.info("code={}, result={}".format(resp_code, resp_data))
     return {"code": "0000", "data": None}
 
 
@@ -45,11 +46,11 @@ async def send_msg_to_dingtalk(items: AlertManagerModel):
     title = "自定义告警"
     data = {"msgtype": "markdown", "markdown": {"title": title, "text": content}}
 
-    # async with aiohttp.ClientSession() as session:
-    #     async with session.post(url=url, json=data, timeout=timeout) as resp:
-    #         resp_code = resp.status
-    #         resp_data = await resp.json()
-    #         logger.info("code={}, result={}".format(resp_code, resp_data))
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=url, json=data, timeout=timeout) as resp:
+            resp_code = resp.status
+            resp_data = await resp.json()
+            logger.info("code={}, result={}".format(resp_code, resp_data))
     return {"code": "0000", "data": None}
 
 
