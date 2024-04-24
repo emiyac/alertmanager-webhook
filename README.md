@@ -18,7 +18,7 @@
 
 ## 简介
 
-`AlertManager Webhook` 是一个基于`FastApi`开发的插件，用于接收`AlertManager`组件发送的告警信息通过指定的模板渲染后发送至企业微信机器人或者钉钉机器人`webhook`
+`AlertManager Webhook` 是一个基于`FastApi`开发的插件，用于接收`AlertManager`组件发送的告警信息，并通过指定的模板渲染后发送至企业微信机器人或者钉钉机器人的`webhook`
 
 ### 默认的消息模板
 
