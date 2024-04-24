@@ -21,10 +21,10 @@ class Settings(BaseSettings):
                              description="grafana地址,用于拼接告警信息跳转")
     TEMPLATE: str = Field(default=path.join(base_dir, "templates"), env="TEMPLATE", description="模板路径")
     # 企业微信机器人配置
-    WX_WEBHOOK: str = Field(
+    WECHAT_WEBHOOK: str = Field(
         default="",
-        env="WX_WEBHOOK", description="企业微信机器人webhook")
-    WX_TEMPLATE: str = Field(default="wx.tmpl", env="WX_TEMPLATE", description="默认的企业微信告警信息模板")
+        env="WECHAT_WEBHOOK", description="企业微信机器人webhook")
+    WECHAT_TEMPLATE: str = Field(default="wechat.tmpl", env="WECHAT_TEMPLATE", description="默认的企业微信告警信息模板")
     # 钉钉机器人配置
     DINGTALK_WEBHOOK: str = Field(
         default="",
