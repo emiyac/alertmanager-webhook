@@ -1,5 +1,6 @@
+from typing import Dict, List, Union
+
 from pydantic import BaseModel
-from typing import List, Dict, Union
 
 
 class AlertModel(BaseModel):
