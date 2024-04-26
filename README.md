@@ -78,17 +78,29 @@
 ```yaml
 # receivers配置
 receivers:
-- name: 'dingtalk-webhook'
+- name: 'wechat-webhook01'
+  webhook_configs:
+  - send_resolved: true
+    # 使用默认的模板wechat.tmpl
+    url: 'http://alertmanager-webhook:8000/wechat'
+
+- name: 'wechat-webhook02'
+  webhook_configs:
+  - send_resolved: true
+    # 使用key指定要发送的企业微信机器人,使用tmpl参数指定模板wechat01.tmpl
+    url: 'http://alertmanager-webhook:8000/wechat?key?=xxx&tmpl=wechat01.tmpl'
+
+- name: 'dingtalk-webhook01'
   webhook_configs:
   - send_resolved: true
     # 使用默认的模板dingtalk.tmpl
     url: 'http://alertmanager-webhook:8000/dingtalk'
 
-- name: 'wechat-webhook'
+- name: 'dingtalk-webhook02'
   webhook_configs:
   - send_resolved: true
-    # 使用tmpl参数指定模板wechat01.tmpl
-    url: 'http://alertmanager-webhook:8000/wechat?tmpl=wechat01.tmpl'
+    # # 使用access_token和secret指定要发送的企业微信机器人,使用tmpl参数指定模板dingtalk01.tmpl
+    url: 'http://alertmanager-webhook:8000/dingtalk?access_token=xxx&secret=xxx&tmpl=dingtalk01.tmpl'
 ```
 
 ### 构建容器镜像
@@ -101,17 +113,17 @@ docker build -t alertmanager-webhook:v1 .
 
 环境变量说明：
 * GRAFANA_URL: grafana访问的地址，用于拼接generatorURL，默认是http://grafana:3000
-* DINGTALK_WEBHOOK: 钉钉机器人的webhook地址
-* DINGTALK_SECRET: 钉钉机器人的密钥
-* DINGTALK_TEMPLATE: 默认的钉钉机器人的消息模板，默认是dingtalk.tmpl
-* WECHAT_WEBHOOK: 企业微信机器人的webhook地址
+* WECHAT_WEBHOOK_KEY: 企业微信机器人webhook携带的key
 * WECHAT_TEMPLATE: 默认的企业微信机器人的消息模板，默认是wechat.tmpl
+* DINGTALK_WEBHOOK_ACCESS_TOKEN: 钉钉机器人webhook携带的access_token
+* DINGTALK_WEBHOOK_SECRET: 钉钉机器人webhook的加签密钥
+* DINGTALK_TEMPLATE: 默认的钉钉机器人的消息模板，默认是dingtalk.tmpl
 * DEBUG: 是否开启调试模式，默认false
 
 #### docker命令行部署
 
 ```bash
-docker run -d --name alertmanager-webhook -e GRAFANA_URL="xxx" -e DINGTALK_WEBHOOK="xxx" -e DINGTALK_SECRET="xxx" -e DINGTALK_TEMPLATE="dingtalk.tmpl" -e WECHAT_WEBHOOK="xxx" -e WECHAT_TEMPLATE="wechat.tmpl" -e DEBUG=false -p 8000:8000 alertmanager-webhook:v1
+docker run -d --name alertmanager-webhook -e GRAFANA_URL="xxx" -e WECHAT_WEBHOOK_KEY="xxx" -e WECHAT_TEMPLATE="wechat01.tmpl" -e DINGTALK_WEBHOOK_ACCESS_TOKEN="xxx" -e DINGTALK_WEBHOOK_SECRET="xxx" -e DINGTALK_TEMPLATE="dingtalk01.tmpl" -e DEBUG=true -p 8000:8000 alertmanager-webhook:v1
 ```
 
 #### docker-compose编排文件部署
@@ -127,13 +139,13 @@ services:
     ports:
       - 8000:8000
     environment:
-      - GRAFANA_URL=xxx
-      - DINGTALK_WEBHOOK=https://oapi.dingtalk.com/robot/send?access_token=xxx
-      - DINGTALK_SECRET=xxx
-      - DINGTALK_TEMPLATE=dingtalk.tmpl
-      - WECHAT_WEBHOOK=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx
-      - WECHAT_TEMPLATE=wechat.tmpl
-      - DEBUG=true
+      - GRAFANA_URL: xxx
+      - WECHAT_WEBHOOK_KEY: xxx
+      - WECHAT_TEMPLATE: wechat01.tmpl
+      - DINGTALK_WEBHOOK_ACCESS_TOKEN: xxx
+      - DINGTALK_WEBHOOK_SECRET: xxx
+      - DINGTALK_TEMPLATE: dingtalk01.tmpl
+      - DEBUG: true
     volumes:
       - ./templates:/workspace/templates
     logging:
@@ -155,7 +167,7 @@ networks:
 #### kubernetes编排文件部署
 
 ```yaml
-# 自定义的模板文件可以使用pvc,configMap或其他方式挂载到容器中，看实际需求配置
+# 自定义的模板文件可以使用pvc,configMap或其他方式挂载到容器中，按实际需求配置
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -181,22 +193,20 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: GRAFANA_URL
-          value: "http://grafana:3000"
-        - name: DINGTALK_WEBHOOK
-          value: "https://oapi.dingtalk.com/robot/send?access_token=xxx"
-        - name: DINGTALK_SECRET
+          value: "xxx"
+        - name: WECHAT_WEBHOOK_KEY
+          value: "xxx"
+        - name: WECHAT_TEMPLATE
+          value: "wechat01.tmpl"
+        - name: DINGTALK_WEBHOOK_ACCESS_TOKEN
+          value: "xxx"
+        - name: DINGTALK_WEBHOOK_SECRET
           value: "xxx"
         - name: DINGTALK_TEMPLATE
-          value: "dingtalk.tmpl"
-        - name: WECHAT_WEBHOOK
-          value: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx"
-        - name: WECHAT_TEMPLATE
-          value: "wechat.tmpl"
+          value: "dingtalk01.tmpl"
         - name: DEBUG
           value: "true"
         resources: {}
-      imagePullSecrets:
-      - name: harbor-secret
 status: {}
 ---
 apiVersion: v1
