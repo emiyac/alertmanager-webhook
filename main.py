@@ -28,7 +28,7 @@ async def send_msg_to_wechat(items: AlertManagerModel, tmpl: str = settings.WECH
     async with aiohttp.ClientSession() as session:
         async with session.post(url=settings.WX_WEBHOOK, json=data, timeout=timeout) as resp:
             resp_code = resp.status
-            resp_data = await resp.json()
+            resp_data = await resp.text()
             logger.info("tmpl={}, code={}, result={}".format(tmpl, resp_code, resp_data))
     return {"code": "0000", "data": None}
 
@@ -48,7 +48,7 @@ async def send_msg_to_dingtalk(items: AlertManagerModel, tmpl: str = settings.DI
     async with aiohttp.ClientSession() as session:
         async with session.post(url=url, json=data, timeout=timeout) as resp:
             resp_code = resp.status
-            resp_data = await resp.json()
+            resp_data = await resp.text()
             logger.info("tmpl={}, code={}, result={}".format(tmpl, resp_code, resp_data))
     return {"code": "0000", "data": None}
 
