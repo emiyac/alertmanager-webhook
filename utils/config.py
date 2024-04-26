@@ -29,7 +29,14 @@ class Settings(BaseSettings):
     )
     # 企业微信机器人配置
     WECHAT_WEBHOOK: str = Field(
-        default="", env="WECHAT_WEBHOOK", description="企业微信机器人webhook"
+        default="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=",
+        env="WECHAT_WEBHOOK",
+        description="企业微信机器人webhook地址",
+    )
+    WECHAT_WEBHOOK_KEY: str = Field(
+        default="",
+        env="WECHAT_WEBHOOK_KEY",
+        description="企业微信机器人webhook的携带的请求参数key的值",
     )
     WECHAT_TEMPLATE: str = Field(
         default="wechat.tmpl",
@@ -38,11 +45,18 @@ class Settings(BaseSettings):
     )
     # 钉钉机器人配置
     DINGTALK_WEBHOOK: str = Field(
-        default="", env="DINGTALK_WEBHOOK", description="钉钉机器人webhook"
+        default="https://oapi.dingtalk.com/robot/send?access_token=",
+        env="DINGTALK_WEBHOOK",
+        description="钉钉机器人webhook地址",
     )
-    DINGTALK_SECRET: str = Field(
+    DINGTALK_WEBHOOK_ACCESS_TOKEN: str = Field(
         default="",
-        env="DINGTALK_SECRET",
+        env="DINGTALK_WEBHOOK_ACCESS_TOKEN",
+        description="钉钉机器人webhook携带的请求参数access_token的值",
+    )
+    DINGTALK_WEBHOOK_SECRET: str = Field(
+        default="",
+        env="DINGTALK_WEBHOOK_SECRET",
         description="加签,参考https://open.dingtalk.com/document/robots/customize-robot-security-settings",
     )
     DINGTALK_TEMPLATE: str = Field(

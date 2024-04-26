@@ -22,3 +22,9 @@ class AlertManagerModel(BaseModel):
     commonAnnotations: Dict[str, Union[int, str]] = {}
     externalURL: str = None
     truncatedAlerts: int = 0
+
+
+class ResponseModel(BaseModel):
+    code: str
+    msg: str
+    data: object = None
