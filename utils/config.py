@@ -16,7 +16,7 @@ LOGGING_CONFIG["formatters"]["access"][
 
 class Settings(BaseSettings):
     DEBUG: bool = Field(default=False, env="DEBUG", description="是否开启debug模式")
-    TIMEOUT: int = Field(default=5, env="TIMEOUT", description="发送请求超时时间")
+    TIMEOUT: int = Field(default=6, env="TIMEOUT", description="发送请求超时时间")
     GRAFANA_URL: str = Field(default="http://grafana:3000", env="GRAFANA_URL",
                              description="grafana地址,用于拼接告警信息跳转")
     TEMPLATE: str = Field(default=path.join(base_dir, "templates"), env="TEMPLATE", description="模板路径")
