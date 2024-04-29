@@ -139,13 +139,13 @@ services:
     ports:
       - 8000:8000
     environment:
-      - GRAFANA_URL: xxx
-      - WECHAT_WEBHOOK_KEY: xxx
-      - WECHAT_TEMPLATE: wechat01.tmpl
-      - DINGTALK_WEBHOOK_ACCESS_TOKEN: xxx
-      - DINGTALK_WEBHOOK_SECRET: xxx
-      - DINGTALK_TEMPLATE: dingtalk01.tmpl
-      - DEBUG: true
+      - GRAFANA_URL=xxx
+      - WECHAT_WEBHOOK_KEY=xxx
+      - WECHAT_TEMPLATE=wechat01.tmpl
+      - DINGTALK_WEBHOOK_ACCESS_TOKEN=xxx
+      - DINGTALK_WEBHOOK_SECRET=xxx
+      - DINGTALK_TEMPLATE=dingtalk01.tmpl
+      - DEBUG=true
     volumes:
       - ./templates:/workspace/templates
     logging:
